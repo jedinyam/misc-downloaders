@@ -1,12 +1,10 @@
 import os
-# import pathlib
+from pathlib import Path
 import click
-
 try:
     import pixivpy3
 except ImportError:
     pixivpy3 = None
-
 
 try:
     import dotenv
@@ -42,6 +40,7 @@ class PixivDownloader(pixivpy3.AppPixivAPI):
 @click.command()
 @click.argument("url")
 def download_pixiv_gallery(url):
+    base_directory = Path("Downloads/pixiv")
     """Download gallery from Pixiv"""
 
     if not has_dotenv:
@@ -58,8 +57,15 @@ def download_pixiv_gallery(url):
 
     user_gallery = downloader.get_user_gallery(
         user_id=work_info["illust"]["user"]["id"])
+    download_directory = base_directory / Path(
+        str(work_info["illust"]["user"]["id"]))
+    download_directory.mkdir(exist_ok=True)
 
-    print(user_gallery)
+    with click.progressbar(user_gallery) as bar:
+        for image in bar:
+            bar.label = image["title"]
+            downloader.download(image["image_urls"]["large"],
+                                path=str(download_directory))
 
 
 if __name__ == "__main__":
