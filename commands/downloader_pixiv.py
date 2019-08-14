@@ -64,8 +64,17 @@ def download_pixiv_gallery(url):
     with click.progressbar(user_gallery) as bar:
         for image in bar:
             bar.label = image["title"]
-            downloader.download(image["image_urls"]["large"],
-                                path=str(download_directory))
+            if len(image["meta_pages"]):
+                downloader.download(image["image_urls"]["large"],
+                                    path=str(download_directory),
+                                    replace=True)
+            else:
+                for page in image["meta_pages"]:
+                    meta_path = download_directory / Path(
+                        page["image_urls"]["large"])
+                    downloader.download(meta_path,
+                                        page["image_urls"]["large"],
+                                        replace=True)
 
 
 if __name__ == "__main__":
