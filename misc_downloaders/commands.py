@@ -4,7 +4,9 @@ from pathlib import Path
 import click
 from misc_downloaders.manganelo_downloader import ManganeloDownloader
 from misc_downloaders.pixiv_downloader import PixivDownloader
+from misc_downloaders.danbooru_downloader import DanbooruDownloader
 from misc_downloaders.utils import download_image
+
 try:
     import dotenv
     dotenv.load_dotenv()
@@ -85,3 +87,30 @@ def download_pixiv_gallery(url):
                     downloader.download(meta_path,
                                         page["image_urls"]["large"],
                                         replace=True)
+
+
+@click.command()
+@click.argument("tags")
+def download_danbooru_tags(tags):
+    directory = Path("./Downloads/danbooru")
+    downloader = DanbooruDownloader(tags)
+    with click.progressbar(range(downloader.page_count),
+                           label="Fetching Posts") as bar:
+        posts = downloader.get_post_list(bar)
+
+    with click.progressbar(posts, label="Downloading items") as bar:
+        questionable_urls = list()
+        for item in bar:
+            try:
+                download_image(item["large_file_url"],
+                               directory / downloader.tag_path)
+            except KeyError:
+                try:
+                    download_image(item["file_url"] / downloader.tag_path)
+                except KeyError:
+                    if item["source"]:
+                        questionable_urls.append(item["source"])
+                    else:
+                        click.print(item)
+
+    click.echo(questionable_urls)
