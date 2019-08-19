@@ -1,11 +1,12 @@
 import unittest
 from bs4 import BeautifulSoup
-from manganelo import Downloader
+from misc_downloaders import ManganeloDownloader
 
 
 class ManganeloTest(unittest.TestCase):
     def setUp(self):
-        self.downloader = Downloader("https://manganelo.com/manga/kimetsu_no_yaiba")
+        self.downloader = ManganeloDownloader(
+            "https://manganelo.com/manga/kimetsu_no_yaiba")
 
     def test_get_html(self):
         soup = self.downloader.get_html(self.downloader.url)
