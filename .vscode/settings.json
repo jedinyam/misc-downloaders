@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "D:\\software\\windows\\Scoop\\apps\\python\\current\\python.exe",
+    "python.pythonPath": "/home/illyalaifu/.local/share/virtualenvs/misc-downloaders-S98X743i/bin/python",
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true,
     "python.testing.unittestArgs": [
