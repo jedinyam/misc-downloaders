@@ -1,12 +1,5 @@
 import pixivpy3
 
-try:
-    import dotenv
-    dotenv.load_dotenv()
-    has_dotenv = True
-except ImportError:
-    has_dotenv = False
-
 
 class PixivDownloader(pixivpy3.AppPixivAPI):
     def __init__(self, username, password, *args, **kwargs):

@@ -10,7 +10,7 @@ pytest = "*"
 
 [packages]
 click = "*"
-pixivpy = "*"
+pixivpy = "3.4.0"
 bs4 = "*"
 requests = "*"
 python-dotenv = "*"

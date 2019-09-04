@@ -15,11 +15,15 @@ class ManganeloDownloader:
         response.raise_for_status()
         return BeautifulSoup(response.text, "html.parser")
 
+    def get_last_chapter(self, chapters):
+        self.chapter_urls()
+
     @property
     def chapter_urls(self):
         chapter_anchors = self.manga_html.find("div", {
             "class": "chapter-list"
         }).find_all("a")
+        chapter_anchors.reverse()
         return map(lambda anchor: anchor["href"], chapter_anchors)
 
     @property
